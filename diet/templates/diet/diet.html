@@ -1,0 +1,396 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}FitX | Elite Nutrition{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'diet/css/diet.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="diet-wrapper">
+        <!-- Header Section -->
+        <header class="section-header">
+            <h1>Personalized <span class="text-accent">Diet Planner</span></h1>
+            <p>Enter your details and get a customized diet plan for your specific fitness goals.</p>
+        </header>
+
+        <!-- User Input Form -->
+        <section class="planner-card">
+            <form id="dietForm" class="form-grid">
+                <div class="form-group">
+                    <label for="age"><i class="fas fa-calendar-alt"></i> Age</label>
+                    <input type="number" id="age" placeholder="e.g. 25" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender"><i class="fas fa-venus-mars"></i> Gender</label>
+                    <select id="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="height"><i class="fas fa-arrows-alt-v"></i> Height (cm)</label>
+                    <input type="number" id="height" placeholder="e.g. 175" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight"><i class="fas fa-weight"></i> Weight (kg)</label>
+                    <input type="number" id="weight" placeholder="e.g. 70" required>
+                </div>
+                <div class="form-group">
+                    <label for="activity"><i class="fas fa-walking"></i> Activity Level</label>
+                    <select id="activity" required>
+                        <option value="1.2">Sedentary (Low)</option>
+                        <option value="1.55">Moderate (3-5 days/week)</option>
+                        <option value="1.9">High (Daily Hard Exercise)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="goal"><i class="fas fa-bullseye"></i> Fitness Goal</label>
+                    <select id="goal" required>
+                        <option value="loss">Weight Loss</option>
+                        <option value="gain">Weight Gain</option>
+                        <option value="muscle">Muscle Gain</option>
+                        <option value="maintain">Maintain Weight</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dietType"><i class="fas fa-leaf"></i> Dietary Preference</label>
+                    <select id="dietType" required>
+                        <option value="veg">Vegetarian</option>
+                        <option value="egg">Eggtarian</option>
+                        <option value="nonveg">Non-Vegetarian</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="targetWeight"><i class="fas fa-flag-checkered"></i> Target Weight (kg)</label>
+                    <input type="number" id="targetWeight" placeholder="e.g. 65" required>
+                </div>
+                <button type="submit" class="btn-generate">
+                    <i class="fas fa-magic"></i> Generate My Diet Plan
+                </button>
+            </form>
+        </section>
+
+        <!-- Result Section -->
+        <div id="results" class="results-section" style="display: none;">
+            <div class="results-main-card">
+                <div class="results-header">
+                    <div class="calories-box">
+                        <p>Suggested Daily Intake</p>
+                        <h2 id="calorieValue">0</h2>
+                        <p>Calories (kcal)</p>
+                    </div>
+
+                    <!-- Calorie Progress Bar -->
+                    <div class="calorie-progress">
+                        <div class="progress-label">
+                            <span>Current Plan Progress</span>
+                            <span id="progressPercent">85% Optimization</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="progressFill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-content-wrap">
+                    <!-- Extra Info Grid -->
+                    <div class="extra-info-grid">
+                        <div class="result-card highlight">
+                            <i class="fas fa-hourglass-half"></i>
+                            <h4>Estimated Duration</h4>
+                            <p id="durationResult">Calculating...</p>
+                        </div>
+                        <div class="result-card">
+                            <i class="fas fa-running"></i>
+                            <h4>Suggested Activity</h4>
+                            <p id="activityResult">Calculating...</p>
+                        </div>
+                    </div>
+
+                    <!-- Meals Grid -->
+                    <div class="meals-grid">
+                        <div class="meal-card">
+                            <span class="meal-icon">🍳</span>
+                            <h3>Breakfast</h3>
+                            <p class="meal-desc" id="breakfastText">Loading...</p>
+                        </div>
+                        <div class="meal-card">
+                            <span class="meal-icon">🥗</span>
+                            <h3>Lunch</h3>
+                            <p class="meal-desc" id="lunchText">Loading...</p>
+                        </div>
+                        <div class="meal-card">
+                            <span class="meal-icon">🍲</span>
+                            <h3>Dinner</h3>
+                            <p class="meal-desc" id="dinnerText">Loading...</p>
+                        </div>
+                        <div class="meal-card">
+                            <span class="meal-icon">🍎</span>
+                            <h3>Healthy Snacks</h3>
+                            <p class="meal-desc" id="snackText">Loading...</p>
+                        </div>
+                        <div class="meal-card water-card">
+                            <i class="fas fa-tint water-icon"></i>
+                            <h3>Hydration</h3>
+                            <p class="meal-desc" id="waterText">Loading...</p>
+                        </div>
+                        <div class="meal-card">
+                            <span class="meal-icon">🔥</span>
+                            <h3>Metabolic Tip</h3>
+                            <p class="meal-desc">Drink green tea 30 mins after lunch to boost thermogenesis.</p>
+                        </div>
+                    </div>
+
+                    <!-- Extra Features -->
+                    <div class="extra-section">
+                        <div class="quote-card">
+                            <i class="fas fa-quote-left"></i>
+                            <p id="motivationalQuote">"Your body is a reflection of what you eat. Fuel it right to perform your best."</p>
+                        </div>
+                        <div class="water-card" style="background: var(--card);">
+                            <h3>Next Steps</h3>
+                            <div class="planner-actions" style="flex-direction: column; gap: 10px;">
+                                <button class="btn-action btn-primary" onclick="window.print()">
+                                    <i class="fas fa-download"></i> Download Plan
+                                </button>
+                                <button class="btn-action btn-outline" style="background:var(--accent);color:#fff;border:none;" onclick="saveDietPlanToDashboard()">
+                                    <i class="fas fa-layer-group"></i> Save to Dashboard
+                                </button>
+                                <a href="{% url 'home' %}" class="btn-action btn-outline">
+                                    <i class="fas fa-home"></i> Back to Home
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Segment -->
+        <section class="faq-section">
+            <h2 style="text-align: center; margin-bottom: 30px;">Common Questions</h2>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q">How accurate is this plan? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-a">We use the Mifflin-St Jeor equation, the gold standard for TDEE calculation. For medical needs, always consult a specialist.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q">Can I modify the meal suggestions? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-a">Absolutely. As long as you stay within the generated calorie budget and maintain your protein intake, you can swap ingredients.</div>
+            </div>
+        </section>
+    </div>
+
+
+
+    <!-- Scripts -->
+    <script>
+        const quotes = [
+            "Your only limit is you. Eat for the goals you want, not the body you have.",
+            "Motivation gets you started. Discipline keeps you going.",
+            "Health is not just what you're eating. It's what you're thinking and saying.",
+            "Take care of your body. It's the only place you have to live.",
+            "Success starts with self-discipline in the kitchen."
+        ];
+
+        document.getElementById('dietForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get Input Values
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const height = parseInt(document.getElementById('height').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            const goal = document.getElementById('goal').value;
+            const dietType = document.getElementById('dietType').value;
+            const targetWeight = parseInt(document.getElementById('targetWeight').value);
+
+            // Calculate BMR (Mifflin-St Jeor Equation)
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            } else {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+
+            // Calculate TDEE
+            let tdee = bmr * activity;
+
+            // Adjust based on goal
+            let targetCal;
+            let planType = "";
+            let weightDiff = Math.abs(targetWeight - weight);
+            let weeksToGoal = Math.max(1, Math.round(weightDiff / 0.5)); // 0.5kg per week safe loss/gain
+
+            if (goal === 'loss') {
+                targetCal = tdee - 500;
+                planType = "Weight Loss Plan";
+                document.getElementById('durationResult').innerText = `Approx. ${weeksToGoal} weeks to reach ${targetWeight}kg`;
+                document.getElementById('activityResult').innerText = `30-45 min Cardio + 15 min Strength (Daily)`;
+            } else if (goal === 'gain' || goal === 'muscle') {
+                targetCal = tdee + 500;
+                planType = "Bulking Plan";
+                document.getElementById('durationResult').innerText = `Approx. ${weeksToGoal * 2} weeks to reach ${targetWeight}kg (Slow Bulk)`;
+                document.getElementById('activityResult').innerText = `45-60 min Heavy Strength Training (4 days/week)`;
+            } else {
+                targetCal = tdee;
+                planType = "Maintenance Plan";
+                document.getElementById('durationResult').innerText = `Infinite (Maintenance focus)`;
+                document.getElementById('activityResult').innerText = `30 min Active Lifestyle / Yoga (Daily)`;
+            }
+
+            // Update UI
+            document.getElementById('calorieValue').innerText = Math.round(targetCal);
+            document.getElementById('motivationalQuote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+            
+            // Generate meal logic based on calories and diet type
+            generateMeals(targetCal, dietType);
+
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('progressFill').style.width = '100%';
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function saveDietPlanToDashboard() {
+            let cal = document.getElementById('calorieValue').innerText;
+            
+            let form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{% url 'save_diet_plan' %}";
+            
+            let csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = 'csrfmiddlewaretoken';
+            csrf.value = '{{ csrf_token }}';
+            form.appendChild(csrf);
+            
+            const fields = {
+                'calories': cal,
+                'breakfast': document.getElementById('breakfastText').innerText,
+                'lunch': document.getElementById('lunchText').innerText,
+                'dinner': document.getElementById('dinnerText').innerText,
+                'snacks': document.getElementById('snackText').innerText
+            };
+            
+            for (const [key, value] of Object.entries(fields)) {
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                form.appendChild(input);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function generateMeals(cal, type) {
+            let meals = {
+                breakfast: "", lunch: "", dinner: "", snacks: "", water: ""
+            };
+
+            const mealData = {
+                veg: {
+                    low: {
+                        breakfast: "Oats with almond milk, chia seeds, and half an apple. (320 kcal)",
+                        lunch: "Paneer salad with bell peppers, cucumbers, and lemon dressing. (420 kcal)",
+                        dinner: "Tofu stir-fry with broccoli and 1/2 cup brown rice. (400 kcal)",
+                        snacks: "A handful of roasted Makhana or 1 medium orange. (120 kcal)"
+                    },
+                    med: {
+                        breakfast: "Moong dal chilla (2) with mint chutney and a glass of buttermilk. (520 kcal)",
+                        lunch: "Lentil (Dal) with 1 cup brown rice and sautéed vegetables. (650 kcal)",
+                        dinner: "Soya chunks curry with 2 chapatis and mixed green salad. (600 kcal)",
+                        snacks: "Greek yogurt with honey and 5-6 almonds. (250 kcal)"
+                    },
+                    high: {
+                        breakfast: "High-protein paneer bhurji with 2 slices of whole grain toast and a banana. (780 kcal)",
+                        lunch: "Double portion of rajma/chole with 1.5 cups brown rice and curd. (850 kcal)",
+                        dinner: "Soya and paneer stir-fry with sweet potato mash and asparagus. (820 kcal)",
+                        snacks: "Peanut butter and banana on toast with a handful of walnuts. (450 kcal)"
+                    }
+                },
+                egg: {
+                    low: {
+                        breakfast: "2 Egg white omelette with spinach and 1 slice of whole-grain toast. (300 kcal)",
+                        lunch: "2 Boiled eggs sliced on a large garden salad with vinaigrette. (380 kcal)",
+                        dinner: "Scrambled eggs (2) with sautéed zucchini and mushrooms. (350 kcal)",
+                        snacks: "A small apple or 1/2 cup grapes. (100 kcal)"
+                    },
+                    med: {
+                        breakfast: "Shakshuka (2 eggs) with 2 small chapatis or whole grain pita. (550 kcal)",
+                        lunch: "Egg curry (2 eggs) with 1 cup brown rice and cabbage sabzi. (620 kcal)",
+                        dinner: "Grilled egg and vegetable wrap in a whole wheat tortilla. (580 kcal)",
+                        snacks: "1/2 cup cottage cheese or a handful of roasted peanuts. (220 kcal)"
+                    },
+                    high: {
+                        breakfast: "4 Scrambled eggs with cheese, avocado, and 2 slices of thick toast. (820 kcal)",
+                        lunch: "Egg biryani (3 eggs) with double portion of raita and side salad. (900 kcal)",
+                        dinner: "Hard boiled eggs (3) with mashed potatoes and buttery green beans. (850 kcal)",
+                        snacks: "Protein bar and a handful of mixed nuts. (420 kcal)"
+                    }
+                },
+                nonveg: {
+                    low: {
+                        breakfast: "Smoked salmon (80g) with 1 whole grain toast and 1/2 avocado. (320 kcal)",
+                        lunch: "Grilled chicken breast (120g) with massive green salad. (350 kcal)",
+                        dinner: "Baked white fish (150g) with steamed asparagus and lemon. (310 kcal)",
+                        snacks: "A hard boiled egg or a small handful of almonds. (100 kcal)"
+                    },
+                    med: {
+                        breakfast: "Chicken sausages (2) with 2 eggs scrambled and 1 slice of toast. (600 kcal)",
+                        lunch: "Grilled chicken (180g) with 1 cup brown rice and sautéed spinach. (700 kcal)",
+                        dinner: "Baked salmon (180g) with sweet potato mash and broccoli. (680 kcal)",
+                        snacks: "Whey protein shake and an apple. (250 kcal)"
+                    },
+                    high: {
+                        breakfast: "3 Eggs with bacon, avocado, and a large bowl of oatmeal with berries. (850 kcal)",
+                        lunch: "Steak (200g) with mashed potatoes, corn, and garlic butter. (950 kcal)",
+                        dinner: "Double chicken breast (250g) with 1.5 cups pasta and olive oil salad. (920 kcal)",
+                        snacks: "Peanut butter sandwich and a protein shake. (500 kcal)"
+                    }
+                }
+            };
+
+            let level = "med";
+            if (cal < 1800) level = "low";
+            else if (cal > 2600) level = "high";
+
+            const plan = mealData[type][level];
+            meals.breakfast = plan.breakfast;
+            meals.lunch = plan.lunch;
+            meals.dinner = plan.dinner;
+            meals.snacks = plan.snacks;
+
+            // Constant water calculation
+            const weightVal = parseInt(document.getElementById('weight').value);
+            meals.water = `Drink at least ${Math.round(weightVal * 0.033 * 10) / 10} Liters of water daily to maintain performance.`;
+
+            document.getElementById('breakfastText').innerText = meals.breakfast;
+            document.getElementById('lunchText').innerText = meals.lunch;
+            document.getElementById('dinnerText').innerText = meals.dinner;
+            document.getElementById('snackText').innerText = meals.snacks;
+            document.getElementById('waterText').innerText = meals.water;
+        }
+
+        function toggleFaq(el) {
+            const a = el.querySelector('.faq-a');
+            const i = el.querySelector('i');
+            if (a.style.display === 'block') {
+                a.style.display = 'none';
+                i.style.transform = 'rotate(0)';
+            } else {
+                a.style.display = 'block';
+                i.style.transform = 'rotate(180deg)';
+            }
+        }
+    </script>
+{% endblock %}
+

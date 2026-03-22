@@ -1,0 +1,139 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}FitX Community{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/css/community.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <section class="comm-hero">
+    <i class="fas fa-dumbbell floating-icons" style="top:20%; left:10%; animation-delay: 0s;"></i>
+    <i class="fas fa-fire floating-icons" style="top:50%; right:15%; animation-delay: 1.5s;"></i>
+    <i class="fas fa-heartbeat floating-icons" style="bottom:10%; left:25%; animation-delay: 3s;"></i>
+    <div data-aos="zoom-in">
+      <h1>Join the Fitness Community</h1>
+      <p>A place where members share progress, support each other, and stay motivated to achieve their best.</p>
+      <a href="{% url 'signup' %}" class="btn-primary" style="padding: 15px 40px; border-radius: 30px;">Join the Community</a>
+    </div>
+  </section>
+
+  <div class="comm-container">
+    
+    <!-- MAIN FEED -->
+    <div class="feed">
+      
+      <div class="glass-card post-card" data-aos="fade-up">
+        <div class="post-header">
+          <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200&q=80" class="post-avatar" alt="User">
+          <div>
+            <div class="post-user">Sarah Jenkins</div>
+            <div class="post-time">2 hours ago</div>
+          </div>
+        </div>
+        <div class="post-text">Just managed to hold my first unassisted handstand for 10 seconds! 🤸‍♀️ The core strengthening program from Coach Alex is absolutely working miracles for my balance. Keep pushing limits everyone!</div>
+        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80" class="post-img" alt="Workout photo">
+        <div class="post-actions">
+          <button class="post-btn"><i class="far fa-heart"></i> 124 Likes</button>
+          <button class="post-btn"><i class="far fa-comment"></i> 18 Comments</button>
+          <button class="post-btn"><i class="far fa-share-square"></i> Share</button>
+        </div>
+      </div>
+
+      <div class="glass-card post-card" data-aos="fade-up">
+        <div class="post-header">
+          <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=200&q=80" class="post-avatar" alt="User">
+          <div>
+            <div class="post-user">Marcus Rodriguez</div>
+            <div class="post-time">5 hours ago</div>
+          </div>
+        </div>
+        <div class="post-text">Hit a new deadlift PR today! 180kg for 3 reps 🔥 Never thought I'd get past the plateau but switching to the advanced strength block made all the difference.</div>
+        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80" class="post-img" alt="Workout photo">
+        <div class="post-actions">
+          <button class="post-btn" style="color:var(--accent);"><i class="fas fa-heart"></i> 342 Likes</button>
+          <button class="post-btn"><i class="far fa-comment"></i> 45 Comments</button>
+          <button class="post-btn"><i class="far fa-share-square"></i> Share</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      
+      <!-- Challenges -->
+      <div class="glass-card sidebar-widget" data-aos="fade-left">
+        <h3 class="title">Active Challenges</h3>
+        {% if challenges %}
+            {% for chal in challenges %}
+            <div class="chal-item" style="border-left: 4px solid var(--accent); margin-bottom: 15px; padding-left: 15px;">
+              <div class="chal-title">{{ chal.title }}</div>
+              <p style="font-size:0.8rem; color:var(--muted); margin-bottom:5px;">{{ chal.description }}</p>
+              <div class="chal-stats">
+                  <span><i class="fas fa-gift"></i> {{ chal.reward }}</span>
+                  <button class="chal-join" style="padding: 5px 15px; border-radius: 20px; background: var(--accent); border: none; color: #fff; cursor: pointer; font-size: 0.75rem;">Join</button>
+              </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--muted); font-size: 0.85rem;">No active challenges at the moment.</p>
+        {% endif %}
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="glass-card sidebar-widget" data-aos="fade-left" data-aos-delay="100">
+        <h3 class="title">Weekly Leaderboard</h3>
+        <div class="leader-row">
+          <div class="leader-rank">1</div>
+          <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=100&q=80" class="post-avatar" style="width:36px;height:36px;" alt="Avatar">
+          <div class="leader-info"><div class="leader-name">Tanya Fit</div><div class="leader-pts">24 Workouts</div></div>
+        </div>
+        <div class="leader-row">
+          <div class="leader-rank">2</div>
+          <img src="https://images.unsplash.com/photo-1507398941214-572c25f4b1dc?w=100&q=80" class="post-avatar" style="width:36px;height:36px;" alt="Avatar">
+          <div class="leader-info"><div class="leader-name">Jordan_lift</div><div class="leader-pts">21 Workouts</div></div>
+        </div>
+        <div class="leader-row">
+          <div class="leader-rank">3</div>
+          <img src="https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=100&q=80" class="post-avatar" style="width:36px;height:36px;" alt="Avatar">
+          <div class="leader-info"><div class="leader-name">Elena_Yoga</div><div class="leader-pts">19 Workouts</div></div>
+        </div>
+      </div>
+
+      <!-- Forum -->
+      <div class="glass-card sidebar-widget" data-aos="fade-left" data-aos-delay="200">
+        <h3 class="title">Discussion Forum</h3>
+        <div class="forum-topic">
+          <span class="forum-title">Beginner running advice? Kness hurt.</span>
+          <span class="forum-replies">45</span>
+        </div>
+        <div class="forum-topic">
+          <span class="forum-title">Best whey protein flavors?</span>
+          <span class="forum-replies">112</span>
+        </div>
+        <div class="forum-topic">
+          <span class="forum-title">How to prep meals for muscle gain</span>
+          <span class="forum-replies">89</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="cta-banner" data-aos="zoom-in">
+    <h2 style="font-family:'Poppins';font-weight:800;font-size:2.4rem;">Start your fitness journey with a supportive community.</h2>
+    <p style="color:var(--muted); margin: 15px auto 30px;">Share. Connect. Thrive. Don't do it alone.</p>
+    <a href="{% url 'signup' %}" class="btn-primary" style="padding:15px 40px; border-radius:30px;">Join Now</a>
+  </div>
+
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    // AOS init and navbar scroll are in base.html already. 
+    // Just keeping any specifics if there are any.
+  </script>
+{% endblock %}
